@@ -16,7 +16,7 @@ export const parts: Part[] = [
     title: 'C++ para firmware',
     level: 'ESTUDIAR antes de la Parte 1',
     description:
-      'Los fundamentos del lenguaje que aparecen en cualquier firmware: tipos, preprocesador, clases, punteros y referencias, const, static, memoria, herencia, enums y cadenas.',
+      'Los fundamentos del lenguaje que aparecen en cualquier firmware: tipos, punteros y referencias, clases, const, preprocesador, archivos .h y .cpp, static, memoria, herencia, enums, volatile y cadenas.',
   },
   {
     slug: 'parte-0',
