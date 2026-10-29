@@ -11,5 +11,5 @@ Commit messages are **one line only**: the conventional-commit subject (`type(sc
   - `constexpr` para constantes, `enum class`, `static_cast`, `#pragma once`.
   - Tiempos con `millis()` y resta (`millis() - ultimo >= intervalo`); `delay()` solo en demos de `setup()`.
   - `uint32_t` en `printf`: castear (`static_cast<unsigned>(x)` con `%u`) o usar `Serial.print`, porque en el core 3.x `uint32_t` no siempre es `unsigned int`.
-  - API del core **Arduino-ESP32 3.x** (`ledcAttach`, `BLEScanResults*` en `start()`); el proyecto usa el **ESP32 clásico** (no el S3); los ejemplos de LEDC usan hasta **14 bits**, aunque el clásico llega a 20.
+  - API del core **Arduino-ESP32 3.x** (`ledcAttach`, `BLEScanResults*` en `start()`); el LEDC del S3 llega a **14 bits**.
   - Objetos globales con `begin()`; nada de `new` en `loop()`; buffers `char[]` con `snprintf`.

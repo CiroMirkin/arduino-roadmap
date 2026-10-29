@@ -2,7 +2,7 @@
 
 Sitio estático hecho con [Waku](https://github.com/wakujs/waku) para aprender a construir un sistema de equipos conectados de punta a punta: C++ para firmware, Arduino y ESP32, arquitectura de firmware, conectividad, y un backend en Node, Express y PostgreSQL para varias organizaciones.
 
-Todas las lecciones usan el mismo ejemplo: el control de un invernadero, con nodos sensores a batería (BLE, deep sleep), un controlador ESP32 que maneja el riego y la ventilación, y un backend donde cada productor tiene sus invernaderos, equipos y usuarios con roles.
+Todas las lecciones usan el mismo ejemplo: el control de un invernadero, con nodos sensores a batería (BLE, deep sleep), un controlador ESP32-S3 que maneja el riego y la ventilación, y un backend donde cada productor tiene sus invernaderos, equipos y usuarios con roles.
 
 ## Contenido
 

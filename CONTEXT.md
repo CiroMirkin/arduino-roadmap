@@ -8,7 +8,7 @@ Audiencia: sabe programar en algún lenguaje, no sabe C++.
 
 **Nodos sensores**: ESP32 (o C3) a batería, con deep sleep. Miden temperatura y humedad del aire y del suelo, y tienen un botón para despertar. Envían por BLE (servidor GATT, notify) una trama binaria de 6 bytes. No mandan hora: el controlador fecha cada medición al recibirla.
 
-**Controlador**: ESP32 clásico en un módulo WROVER (con 4 MB de PSRAM) y pantalla táctil SPI de 480×320. Recibe a los nodos (cliente BLE), decide el riego y la ventilación (máquina de estados), maneja relés y PWM (ventilador a 25 kHz, luces, servo de la ventana cenital), guarda la configuración y la calibración en NVS, y envía al backend por WiFi/HTTP con una cola de pendientes. Sigue funcionando sin red, con la última configuración que recibió.
+**Controlador**: ESP32-S3 con PSRAM y pantalla táctil. Recibe a los nodos (cliente BLE), decide el riego y la ventilación (máquina de estados), maneja relés y PWM (ventilador a 25 kHz, luces, servo de la ventana cenital), guarda la configuración y la calibración en NVS, y envía al backend por WiFi/HTTP con una cola de pendientes. Sigue funcionando sin red, con la última configuración que recibió.
 
 **Backend**: Node + Express + PostgreSQL. Varias organizaciones (productores), cada una con varios invernaderos, cada uno con sus zonas y sus dispositivos. Roles admin, operario y solo lectura. Ingesta idempotente de lecturas y límite de pedidos por dispositivo.
 
