@@ -67,6 +67,13 @@ body {
   margin-bottom: 0.75rem;
 }
 
+.leccion img {
+  display: block;
+  max-width: min(100%, 360px);
+  height: auto;
+  margin: 0 auto;
+}
+
 .leccion ul {
   list-style: disc;
   padding-left: 1.5rem;

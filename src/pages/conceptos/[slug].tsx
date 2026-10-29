@@ -29,14 +29,15 @@ const renderQuiz = async (quiz: Quiz): Promise<QuizRenderizado> => ({
   ),
 });
 
-const SeccionQuiz = async ({ quizzes }: { quizzes: Quiz[] }) => {
+const SeccionQuiz = async ({ slug, quizzes }: { slug: string; quizzes: Quiz[] }) => {
   if (quizzes.length === 0) return null;
   const renderizados = await Promise.all(quizzes.map(renderQuiz));
   return (
     <div className="mt-10">
       <h2 className="text-xl font-semibold tracking-tight text-ink">Comprobá lo que entendiste</h2>
       {renderizados.map((quiz, i) => (
-        <QuizCard key={i} quiz={quiz} numero={i + 1} total={renderizados.length} />
+        // La key incluye el slug para que al cambiar de lección el quiz arranque sin responder.
+        <QuizCard key={`${slug}-${i}`} quiz={quiz} numero={i + 1} total={renderizados.length} />
       ))}
     </div>
   );
@@ -51,7 +52,7 @@ const CuerpoLeccion = async ({ concept }: { concept: Concept }) => {
   return (
     <>
       <div className="leccion mt-6" dangerouslySetInnerHTML={{ __html: htmlAntes }} />
-      <SeccionQuiz quizzes={concept.quizzes} />
+      <SeccionQuiz slug={concept.slug} quizzes={concept.quizzes} />
       {despues.trim() && (
         <div className="leccion mt-10" dangerouslySetInnerHTML={{ __html: htmlDespues }} />
       )}

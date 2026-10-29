@@ -22,7 +22,6 @@ export const QuizCard = ({ quiz, numero, total }: QuizProps) => {
   const [selected, setSelected] = useState<number | null>(null);
 
   const answered = selected !== null;
-  const selectedOption = answered ? quiz.options[selected] : null;
 
   const optionClasses = (index: number, correct: boolean) => {
     if (!answered) {
@@ -34,8 +33,9 @@ export const QuizCard = ({ quiz, numero, total }: QuizProps) => {
     if (index === selected && !correct) {
       return 'border-danger/50 bg-danger/10';
     }
+    // Si erró, la correcta queda un poco atenuada para compararla con la elegida.
     if (correct) {
-      return 'border-success/30 bg-success/5';
+      return 'border-success/50 bg-success/10 opacity-80';
     }
     return 'border-ink/10 bg-surface opacity-60';
   };
@@ -72,25 +72,15 @@ export const QuizCard = ({ quiz, numero, total }: QuizProps) => {
               className="font-medium text-ink/90"
               dangerouslySetInnerHTML={{ __html: option.textHtml }}
             />
-            {answered && index === selected && (
+            {answered && (index === selected || option.correct) && (
               <span className="mt-2 block text-sm font-normal text-ink/70">
-                {option.correct ? 'Correcto. ' : 'No es correcto. '}
+                {index !== selected ? 'Esta es la correcta. ' : option.correct ? 'Correcto. ' : 'No es correcto. '}
                 <span dangerouslySetInnerHTML={{ __html: option.explanationHtml }} />
               </span>
             )}
           </button>
         ))}
       </div>
-
-      {answered && !selectedOption?.correct && (
-        <button
-          type="button"
-          onClick={() => setSelected(null)}
-          className="mt-4 rounded-md border border-ink/14 px-3 py-1.5 text-sm text-ink/64 hover:bg-ink/5"
-        >
-          Intentar de nuevo
-        </button>
-      )}
     </div>
   );
 };

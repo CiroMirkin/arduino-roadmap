@@ -48,6 +48,7 @@ src/
     conceptos/[slug].tsx  una lección
 tools/
   verificar-ejemplos.py   compila los ejemplos de C++ completos contra el core esp32
+  verificar-quiz.py       revisa que la respuesta correcta no se note por ser la más larga
 ```
 
 ## Escribir una lección
@@ -71,6 +72,8 @@ quiz:
 ```
 
 El cuerpo es Markdown. Los bloques de código llevan el lenguaje y una etiqueta opcional (` ```cpp sensor.ino `), los links internos son `/conceptos/<slug>`, y `<!-- quiz -->` marca dónde va el quiz.
+
+En cada pregunta, la opción correcta no puede ser más larga que todas las incorrectas por más de 6 caracteres; `python tools/verificar-quiz.py` lo revisa.
 
 ## Verificar los ejemplos de C++
 

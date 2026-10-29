@@ -80,12 +80,7 @@ export default async function PartPage({ part: partSlug }: PartPageProps) {
               </span>
               <InlineMd texto={concept.title} />
             </span>
-            <span className="flex shrink-0 items-center gap-2">
-              {concept.quizzes.length > 0 && (
-                <span className="rounded-full bg-accent/10 px-2 py-0.5 text-xs text-accent">
-                  Quiz
-                </span>
-              )}
+            <span className="shrink-0">
               <LevelBadge level={concept.level} />
             </span>
           </Link>
