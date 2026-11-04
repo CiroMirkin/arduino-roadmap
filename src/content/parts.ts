@@ -24,7 +24,7 @@ export const parts: Part[] = [
     title: 'Arduino y ESP32',
     level: 'ESTUDIAR antes de la Parte 1',
     description:
-      'Cómo funciona la placa: el ciclo setup/loop, memorias, pines, ADC, PWM, buses (UART, I2C, SPI), interrupciones, BLE, WiFi, almacenamiento permanente, deep sleep y librerías.',
+      'Cómo funciona la placa: el ciclo setup/loop, memorias, pines, ADC, PWM, buses (UART, I2C, SPI), interrupciones, BLE, WiFi, almacenamiento permanente, deep sleep, librerías y el bus CAN.',
   },
   {
     slug: 'parte-1',
