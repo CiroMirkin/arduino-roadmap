@@ -11,8 +11,10 @@ primeras líneas dicen "nodo". Además se revisa que los pines de las constantes
 PIN_... existan y se puedan usar en ese chip.
 Los bloques que son fragmentos (usan funciones que no definen) fallan con
 "was not declared": revisarlos a mano y descartar los esperables.
+Los que compilan quedan en docs/ejemplos-verificados.md, con la fecha y el commit.
 """
 
+import datetime
 import glob
 import os
 import re
@@ -22,6 +24,14 @@ import tempfile
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LECCIONES = os.path.join(RAIZ, "src", "content", "conceptos")
+REGISTRO = os.path.join(RAIZ, "docs", "ejemplos-verificados.md")
+ENCABEZADO = """# Ejemplos verificados
+
+Generado por `tools/verificar-ejemplos.py`. Cada fila es un ejemplo que compiló sin errores para su placa y usa pines válidos; nada de esto se probó en hardware. `+cambios` indica que la lección tenía cambios sin commitear al compilarla.
+
+| Lección | Bloque | Etiqueta | Equipo | Compilado | Commit |
+|---|---|---|---|---|---|
+"""
 CLI = os.environ.get("ARDUINO_CLI", "arduino-cli")
 FQBN = {
     "controlador": "esp32:esp32:esp32s3:FlashSize=16M",   # DevKitC-1 N16R8
@@ -57,8 +67,36 @@ def extraer(destino, prefijos):
                 with open(os.path.join(carpeta, nombre + ".ino"), "w", encoding="utf8") as f:
                     f.write(codigo)
                 etiqueta = m.group(1).strip()
-                sketches.append((nombre, carpeta, etiqueta, equipo(etiqueta, codigo), codigo))
+                sketches.append((slug, i, nombre, carpeta, etiqueta, equipo(etiqueta, codigo), codigo))
     return sketches
+
+
+def commit_de(slug):
+    git = ["git", "-C", RAIZ]
+    commit = subprocess.run(git + ["rev-parse", "--short", "HEAD"],
+                            capture_output=True, text=True, check=True).stdout.strip()
+    ruta = os.path.join(LECCIONES, slug + ".md")
+    cambios = subprocess.run(git + ["status", "--porcelain", "--", ruta],
+                             capture_output=True, text=True, check=True).stdout.strip()
+    return commit + "+cambios" if cambios else commit
+
+
+def clave_orden(fila):
+    slug, bloque = [c.strip() for c in fila.split("|")[1:3]]
+    return [int(p) if p.isdigit() else p for p in re.split(r"(\d+)", slug)], int(bloque)
+
+
+def actualizar_registro(revisadas, verificados):
+    """Reemplaza las filas de las lecciones ya revisadas y conserva las demás."""
+    filas = []
+    if os.path.exists(REGISTRO):
+        for linea in open(REGISTRO, encoding="utf8"):
+            if re.match(r"\| [\w-]+ \| \d+ \|", linea):
+                if linea.split("|")[1].strip() not in revisadas:
+                    filas.append(linea.rstrip("\n"))
+    filas += verificados
+    with open(REGISTRO, "w", encoding="utf8") as f:
+        f.write(ENCABEZADO + "\n".join(sorted(filas, key=clave_orden)) + "\n")
 
 
 def main():
@@ -68,7 +106,10 @@ def main():
     sketches = extraer(os.path.join(temporal, "sketches"), prefijos)
     print(f"{len(sketches)} sketches en {temporal}")
     fallos = 0
-    for nombre, carpeta, etiqueta, eq, codigo in sketches:
+    verificados = []
+    revisadas = set()
+    hoy = datetime.date.today().isoformat()
+    for slug, bloque, nombre, carpeta, etiqueta, eq, codigo in sketches:
         r = subprocess.run(
             [CLI, "compile", "--fqbn", FQBN[eq], "--warnings", "all",
              "--build-path", os.path.join(build, eq), carpeta],
@@ -77,8 +118,12 @@ def main():
         salida = r.stdout + r.stderr
         malos = sorted({int(n) for n in PIN.findall(codigo)} - PINES[eq])
         ok = r.returncode == 0 and not malos
-        if not ok:
+        if ok:
+            verificados.append(f"| {slug} | {bloque} | {etiqueta} | {eq} | {hoy} | {commit_de(slug)} |")
+        else:
             fallos += 1
+        revisadas.add(slug)
+        actualizar_registro(revisadas, verificados)   # en cada ejemplo: se puede cortar a mitad de camino
         print(f"{'OK  ' if ok else 'FALLA'} {nombre} ({etiqueta}, {eq})", flush=True)
         if malos:
             print(f"      pines que no se pueden usar en el {eq}: {malos}")
