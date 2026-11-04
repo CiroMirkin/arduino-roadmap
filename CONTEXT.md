@@ -53,7 +53,6 @@ Los ejemplos de "Mal:" que usan un pin incorrecto a propósito (strapping, ADC2,
 | CO₂ por UART2: TX / RX | 17 / 18 |
 | Botones ▲ / ▼ / OK | 39 / 40 / 41 |
 | Motor de la cortina: desplegar / recoger | 42 / 47 |
-| CAN: TX / RX (solo en los ejemplos de la lección 0.14; comparte pines con la zona 2 y el accesorio) | 14 / 2 |
 
 **Nodo** (ESP32 clásico, DevKit). Los ejemplos de LED y de `analogRead` de suelo corren en el nodo.
 
@@ -65,16 +64,6 @@ Los ejemplos de "Mal:" que usan un pin incorrecto a propósito (strapping, ADC2,
 | Luz, fotorresistencia (ADC1) | 33 |
 | Humedad del suelo (ADC1); un segundo sensor en el 32 | 34 |
 | Batería, divisor (ADC1) | 35 |
-
-**Tablero de la sala de bombas** (lección 0.14). ESP32 clásico conectado al controlador por CAN a 125 kbit/s, con transceptor SN65HVD230. Solo aparece en esa lección.
-
-| Función | GPIO |
-|---|---|
-| CAN: TX / RX | 25 / 26 |
-| Relé de la bomba (activo en bajo) | 13 |
-| Flotante del tanque (a GND mientras hay agua) | 14 |
-
-IDs CAN: `0x080` alarma de tanque vacío, `0x100` orden de bomba, `0x200` estado del tablero.
 
 ## Otros valores
 
